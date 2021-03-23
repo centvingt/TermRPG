@@ -9,7 +9,20 @@ import Foundation
 
 class Character {
     let name: String
-    var life = 300
+    
+    // At begining life points are at 300
+    var life = 300 {
+        // Life points cannot drop below 0
+        didSet {
+            life = life < 0 ? 0 : life
+        }
+    }
+    
+    // Character is alive if life points are greather than 0
+    var isAlive: Bool {
+        life > 0
+    }
+    
     var item: Item?
     
     init(name: String) {

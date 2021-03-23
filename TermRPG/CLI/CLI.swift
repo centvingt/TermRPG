@@ -97,20 +97,41 @@ struct CLI {
 
     func round() {
         let currentTeam = game.team1
+        var otherTeam: Team {
+            currentTeam.owner == game.team1.owner ? game.team2 : game.team1
+        }
+        var indexCharacter1: Int
+        var indexCharacter2: Int
         
-        func playerAction(isAnAttack: Bool = false) {
+//        func playerAction() {
+//            print(
+//                """
+//                \(currentTeam.owner), choisissez un personnage de votre équipe :
+//                \(displayCharacters(of: currentTeam, forChoice: true))
+//                """
+//            )
+//            if let choice = readLine() {
+//                guard let index = getCharacterIndex(choice) else {
+//                    print(invalidTypingMessage(maxKey: 3))
+//                    return
+//                }
+//            }
+//        }
+        
+        func playerAction() {
             var character1: Character
             var character2: Character
-            
+
             print(
                 """
-                \(currentTeam.owner), choisissez un personnage\(isAnAttack ? " dans l’équipe adverse" : "dans votre équipe") en tapant le numéro qui lui correspond :
+                \(currentTeam.owner), choisissez un personnage de votre équipe :
                 \(displayCharacters(of: currentTeam, forChoice: true))
                 """
             )
             if let choice = readLine() {
                 guard let index = getCharacterIndex(choice) else {
-                    print(invalidTypingMessage(maxKey: 3))
+                    print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
+                    playerAction()
                     return
                 }
                 character1 = currentTeam.characters[index]
@@ -128,6 +149,48 @@ struct CLI {
                     guard choice == "1" || choice == "2" else {
                         print(invalidTypingMessage(maxKey: 2))
                         return
+                    }
+                    // Attack
+                    if choice == "1" {
+                        print(
+                            """
+                            Choisissez le personnage de l’équipe adverse que vous souhaitez attaquer :
+                            \(displayCharacters(of: otherTeam, forChoice: true, isEnemy: true))
+                            """
+                        )
+                        if let choice = readLine() {
+                            guard let index = getCharacterIndex(choice) else {
+                                print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
+                                return
+                            }
+                            character2 = otherTeam.characters[index]
+                            character2.life -= character1.attackPoints
+                            print(
+                                """
+                                Vous avez infligé \(character1.attackPoints) à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort").
+                                """
+                            )
+                        }
+                    } else {
+                        print(
+                            """
+                            Choisissez le personnage de votre équipe que vous souhaitez soigner :
+                            \(displayCharacters(of: currentTeam, forChoice: true))
+                            """
+                        )
+                        if let choice = readLine() {
+                            guard let index = getCharacterIndex(choice) else {
+                                print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
+                                return
+                            }
+                            character2 = currentTeam.characters[index]
+                            character2.life -= character1.healingPoints
+                            print(
+                                """
+                                Vous avez soigné \(character2.name) qui a gagné \(character1.healingPoints), ses points de vie sont maintenant de \(character2.life).
+                                """
+                            )
+                        }
                     }
                 }
             }
@@ -159,15 +222,26 @@ struct CLI {
         let attack = "💪 \(character.attackPoints) points"
         let healing = "🩺 \(character.healingPoints) points"
         let item = "⚒️ \(character.item?.name ?? "Mains nues")"
-        return "\(isEnemy ? "😡" : "🙂") \(name) (\(life), \(item), \(attack), \(healing))"
+        var nameEmoji = "🙂"
+        if isEnemy { nameEmoji = "😡" }
+        if !character.isAlive { nameEmoji = "☠️" }
+        return "\(nameEmoji) \(name) (\(life), \(item), \(attack), \(healing))"
     }
     
     /* Display informations of all characters. In a menu,
      set 'for choice' parameter to present numbers */
-    private func displayCharacters(of team: Team, forChoice: Bool = false) -> String {
+    private func displayCharacters(
+        of team: Team,
+        forChoice: Bool = false,
+        isEnemy: Bool = false
+    ) -> String {
         var string = ""
-        team.characters.enumerated().forEach { (index, character) in
-            string += "\(forChoice ? "\(index + 1). " : "")\(displayCharacterInformations(character)) \n"
+        
+        /* To display a choice, only present team's living characters */
+        let characters = forChoice ? team.livingCharacters : team.characters
+        
+        characters.enumerated().forEach { (index, character) in
+            string += "\(forChoice ? "\(index + 1). " : "")\(displayCharacterInformations(character, isEnemy: isEnemy)) \n"
         }
         return string
     }
