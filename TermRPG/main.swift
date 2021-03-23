@@ -7,5 +7,13 @@
 
 import Foundation
 
-print("Hello, World!")
+var game = Game()
+var cli = CLI()
 
+func presentMenu() {
+    cli.setTeams()
+    cli.round()
+}
+while true {
+    presentMenu()
+}
