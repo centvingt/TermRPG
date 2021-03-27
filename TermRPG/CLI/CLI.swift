@@ -7,126 +7,106 @@
 
 import Foundation
 
-struct CLI {
+class CLI {
+    var game: Game
+    
+    private var currentTeam: Team
+    private var otherTeam: Team {
+        currentTeam.owner == game.team1.owner ? game.team2 : game.team1
+    }
+    
+    init(game: Game) {
+        self.game = game
+        self.currentTeam = game.team1
+    }
+    
     /* Set teams at the start of the game */
     func setTeams() {
-        // Start by configure the first team
-        var currentTeam = game.team1
-        
-        // Set a team
-        func setTeam() {
-            // Creation ot the first character
-            print(
-                """
-                Bienvenue, \(currentTeam.owner) !
-                Tapez le nom de votre PREMIER personnage, puis validez avec la touche Entrée de votre clavier :
-                """
-            )
-            createNewCharacter()
-            
-            // Creation ot the second character
-            print(
-                """
-                \(currentTeam.owner), tapez maintenant le nom de votre DEUXIÈME personnage, puis validez avec la touche Entrée de votre clavier :
-                """
-            )
-            createNewCharacter()
-            
-            // Creation ot the third character
-            print(
-                """
-                \(currentTeam.owner), pour finir, tapez le nom de votre TROISIÈME personnage, puis validez avec la touche Entrée de votre clavier :
-                """
-            )
-            createNewCharacter()
-            
-            /* Presentation of the complete team. If it is
-             the first team, transition to the second player */
-            print(
-                """
-                Merci \(currentTeam.owner), vous avez complété votre équipe qui est composée de :
-                \(displayCharacters(of: currentTeam))
-                \(currentTeam.owner == game.team1.owner ? "C’est maintenant au tour de \(game.team2.owner) de choisir ses personnages..." : "")
-                
-                """
-            )
-        }
-        
-        // Find if a name already exists
-        func nameAlreadyExists(_ name: String) -> Bool {
-            // Array of all existing names
-            let names = game.team1.characters.map({ $0.name }) + game.team2.characters.map({ $0.name })
-            
-            return names.contains(name)
-        }
-        
-        // Set a new character
-        func createNewCharacter() {
-            func characterCreationMessages() {
-                // Get the name typed by a player
-                if let name = readLine() {
-                    // Retry typing if the name is already in use
-                    if nameAlreadyExists(name) {
-                        print("Ce nom a déjà été utilisé, veuillez en choisir un autre.")
-                        characterCreationMessages()
-                        return
-                    }
-                    
-                    // Create a new character
-                    let character = Character(name: name)
-                    currentTeam.add(character: character)
-                    print(
-                        """
-                        \(name) a été ajouté à votre équipe
-                        
-                        """
-                    )
-                }
-            }
-            
-            characterCreationMessages()
-        }
-        
         // Creation of the first team
-        setTeam()
+        setCurrentTeam()
         
         // Creation of the second team
         currentTeam = game.team2
-        setTeam()
+        setCurrentTeam()
     }
-
+    
     func round() {
-        var currentTeam = game.team1
-        var otherTeam: Team {
-            currentTeam.owner == game.team1.owner ? game.team2 : game.team1
-        }
+        var gameIsOver = false
+        repeat {
+            currentTeam = game.team1
+            playerAction()
+            
+            currentTeam = game.team2
+            playerAction()
+            
+            game.round += 1
+            
+            if game.team1.livingCharacters.isEmpty || game.team2.livingCharacters.isEmpty {
+                gameIsOver = true
+                presentStats()
+            }
+        } while !gameIsOver
+    }
+    
+    // Set a team
+    private func setCurrentTeam() {
+        // Creation ot the first character
+        print(
+            """
+            Bienvenue, \(currentTeam.owner) !
+            Tapez le nom de votre PREMIER personnage, puis validez avec la touche Entrée de votre clavier :
+            """
+        )
+        createNewCharacter()
         
-        func playerAction() {
-            print(
-                """
-                \(currentTeam.owner), choisissez un personnage de votre équipe :
-                \(displayCharacters(of: currentTeam, forChoice: true))
-                """
-            )
+        // Creation ot the second character
+        print(
+            """
+            \(currentTeam.owner), tapez maintenant le nom de votre DEUXIÈME personnage, puis validez avec la touche Entrée de votre clavier :
+            """
+        )
+        createNewCharacter()
+        
+        // Creation ot the third character
+        print(
+            """
+            \(currentTeam.owner), pour finir, tapez le nom de votre TROISIÈME personnage, puis validez avec la touche Entrée de votre clavier :
+            """
+        )
+        createNewCharacter()
+        
+        /* Presentation of the complete team. If it is
+         the first team, transition to the second player */
+        print(
+            """
+            Merci \(currentTeam.owner), vous avez complété votre équipe qui est composée de :
+            \(displayCharacters(of: currentTeam))
+            \(currentTeam.owner == game.team1.owner ? "C’est maintenant au tour de \(game.team2.owner) de choisir ses personnages..." : "")
+            
+            """
+        )
+    }
+    
+    private func playerAction() {
+        print(
+            """
+            \(currentTeam.owner), choisissez un personnage de votre équipe :
+            \(displayCharacters(of: currentTeam, forChoice: true))
+            """
+        )
+        var choiceIsDone = false
+        repeat {
             if let choice = readLine() {
                 guard let index = getCharacterIndex(choice) else {
                     print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
-                    playerAction()
-                    return
+                    continue
                 }
-                // TODO: retourner un PERSONNAGE VIVANT !
-//                let character1 = currentTeam.characters[index]
-//                let selectedCharacter = currentTeam.livingCharacters[index]
-//                // TODO: Lancer une erreur
-//                guard let characterIndex = currentTeam.getIndexCharacterByName(selectedCharacter.name) else {
-//                    print("😱Un erreur est survenue lors du choix de votre personnage...")
-//                    return
-//                }
                 guard let character1 = currentTeam.getLivingCharacter(by: index) else {
-                    // TODO : redémarrer le jeu
+                    throwABigChoosingCharacterError(nthCharacter: "premier")
                     return
                 }
                 
+                choiceIsDone = true
                 print(
                     """
                     Vous avez choisi \(character1.name) :
@@ -134,6 +114,7 @@ struct CLI {
                     
                     """
                 )
+                
                 if let chestContent = Item.chestAppearance(excludeItem: character1.item) {
                     var hasAnItem = false
                     if let _ = character1.item {
@@ -149,38 +130,39 @@ struct CLI {
                         2. Non
                         """
                     )
-                    func chestChoice() {
+                    var chestChoiceIsDone = false
+                    repeat {
                         if let choice = readLine() {
                             guard choice == "1" || choice == "2" else {
                                 print(invalidTypingMessage(maxKey: 2))
-                                chestChoice()
-                                return
+                                continue
                             }
+                            chestChoiceIsDone = true
                             guard choice == "1" else {
-                                return
+                                continue
                             }
                             character1.item = chestContent
                         }
-                    }
-                    chestChoice()
+                    } while !chestChoiceIsDone
                 }
-                func chooseAction() {
-                    print(
-                        """
-                        Souhaitez-vous :
-                        1. Attaquer un personnage de l’équipe adverse ?
-                        2. Soigner un personnage de votre équipe ?
-                        """
-                    )
-                    if let choice = readLine() {
-                        guard choice == "1" || choice == "2" else {
+                print(
+                    """
+                    Souhaitez-vous :
+                    1. Attaquer un personnage de l’équipe adverse ?
+                    2. Soigner un personnage de votre équipe ?
+                    """
+                )
+                var actionIsSelected = false
+                repeat {
+                    if let actionChoice = readLine() {
+                        guard actionChoice == "1" || actionChoice == "2" else {
                             print(invalidTypingMessage(maxKey: 2))
-                            chooseAction()
-                            return
+                            continue
                         }
-                        // Attack
-                        if choice == "1" {
-                            func attack() {
+                        actionIsSelected = true
+                        if actionChoice == "1" {
+                            var character2IsSelected = false
+                            repeat {
                                 print(
                                     """
                                     Choisissez le personnage de l’équipe adverse que vous souhaitez attaquer :
@@ -190,14 +172,16 @@ struct CLI {
                                 if let choice = readLine() {
                                     guard let index = getCharacterIndex(choice) else {
                                         print(invalidTypingMessage(maxKey: otherTeam.livingCharacters.count))
-                                        attack()
-                                        return
+                                        continue
                                     }
-//                                    let character2 = otherTeam.characters[index]
+                                    
                                     guard let character2 = otherTeam.getLivingCharacter(by: index) else {
-                                        // TODO : redémarrer le jeu
+                                        throwABigChoosingCharacterError(nthCharacter: "deuxième")
                                         return
                                     }
+                                    
+                                    character2IsSelected = true
+                                    
                                     character2.life -= character1.attackPoints
                                     print(
                                         """
@@ -206,10 +190,10 @@ struct CLI {
                                         """
                                     )
                                 }
-                            }
-                            attack()
+                            } while !character2IsSelected
                         } else {
-                            func heal() {
+                            var character2IsSelected = false
+                            repeat {
                                 print(
                                     """
                                     Choisissez le personnage de votre équipe que vous souhaitez soigner :
@@ -219,14 +203,15 @@ struct CLI {
                                 if let choice = readLine() {
                                     guard let index = getCharacterIndex(choice) else {
                                         print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
-                                        heal()
-                                        return
+                                        continue
                                     }
-//                                    let character2 = currentTeam.characters[index]
+                                    
                                     guard let character2 = currentTeam.getLivingCharacter(by: index) else {
-                                        // TODO : redémarrer le jeu
+                                        throwABigChoosingCharacterError(nthCharacter: "deuxième")
                                         return
                                     }
+                                    
+                                    character2IsSelected = true
                                     character2.life += character1.healingPoints
                                     print(
                                         """
@@ -235,43 +220,63 @@ struct CLI {
                                         """
                                     )
                                 }
-                            }
-                            heal()
+                            } while !character2IsSelected
                         }
                     }
+                } while !actionIsSelected
+            }
+        } while !choiceIsDone
+    }
+    
+    // Set a new character
+    private func createNewCharacter() {
+        var characterIsCreated = false
+        repeat {
+            // Get the name typed by a player
+            if let name = readLine() {
+                // Retry typing if the name is already in use
+                if nameAlreadyExists(name) {
+                    print("Ce nom a déjà été utilisé, veuillez en choisir un autre.")
+                    continue
                 }
-                chooseAction()
+                
+                // Create a new character
+                let character = Character(name: name)
+                currentTeam.add(character: character)
+                print(
+                    """
+                    \(name) a été ajouté à votre équipe
+                    
+                    """
+                )
+                characterIsCreated = true
             }
+        } while !characterIsCreated
+    }
+    
+    
+    private func invalidTypingMessage(maxKey: Int) -> String {
+        var string = "1"
+        let range = 2..<maxKey
+        for key in range {
+            string += ", \(key)"
         }
+        string += " ou \(maxKey)"
+        return "🤔 Je n’ai pas compris votre choix, veuillez taper sur la touche \(string) de votre clavier.\n"
+    }
+    private func getCharacterIndex(_ choice: String) -> Int? {
+        guard let index = Int(choice),
+              1...3 ~= index else { return nil }
+        return index - 1
+    }
+    
+    
+    // Find if a name already exists
+    private func nameAlreadyExists(_ name: String) -> Bool {
+        // Array of all existing names
+        let names = game.team1.characters.map({ $0.name }) + game.team2.characters.map({ $0.name })
         
-        func invalidTypingMessage(maxKey: Int) -> String {
-            var string = "1"
-            let range = 2..<maxKey
-            for key in range {
-                string += ", \(key)"
-            }
-            string += " ou \(maxKey)"
-            return "🤔 Je n’ai pas compris votre choix, veuillez taper sur la touche \(string) de votre clavier.\n"
-        }
-        func getCharacterIndex(_ choice: String) -> Int? {
-            guard let index = Int(choice),
-                  1...3 ~= index else { return nil }
-            return index - 1
-        }
-        
-        playerAction()
-        
-        currentTeam = game.team2
-        playerAction()
-        
-        game.round += 1
-        
-        if game.team1.livingCharacters.isEmpty || game.team2.livingCharacters.isEmpty {
-            presentStats()
-            return
-        }
-        
-        round()
+        return names.contains(name)
     }
     
     /* Display informations of a character. To present a enemy's
@@ -321,15 +326,26 @@ struct CLI {
             Tapez RECOMMENCER pour refaire une partie :
             """
         )
-        if let choice = readLine() {
-            guard choice == "RECOMMENCER" else {
-                print("Je n’ai pas compris ce que vous avez tapé. Écrivez très exactement “RECOMMENCER” en respectant les majuscules pour refaire une partie")
-                presentStats()
-                return
+        
+        var typingIsCorrect = false
+        repeat {
+            if let choice = readLine() {
+                guard choice == "RECOMMENCER" else {
+                    print("Je n’ai pas compris ce que vous avez tapé. Écrivez très exactement “RECOMMENCER” en respectant les majuscules pour refaire une partie")
+                    continue
+                }
+                typingIsCorrect = true
+                restart()
             }
-            game.reset()
-            cli.setTeams()
-            cli.round()
-        }
+        } while !typingIsCorrect
+    }
+    private func throwABigChoosingCharacterError(nthCharacter: String) {
+        print("👻 Oups ! Un énorme problème est apparu en choisissant le \(nthCharacter) personnage, le jeu va redémarrer dans quelques instants...")
+        restart()
+    }
+    private func restart() {
+        game.reset()
+        cli.setTeams()
+        cli.round()
     }
 }
