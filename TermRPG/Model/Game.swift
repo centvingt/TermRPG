@@ -24,10 +24,6 @@ class Game {
         round = 0
     }
     
-    func start() {
-        reset()
-    }
-    
     func add(character: Character, to team: inout Team) {
         team.add(character: character)
     }

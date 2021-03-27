@@ -14,7 +14,7 @@ struct CLI {
         var currentTeam = game.team1
         
         // Set a team
-        func setCurrentTeam() {
+        func setTeam() {
             // Creation ot the first character
             print(
                 """
@@ -88,11 +88,11 @@ struct CLI {
         }
         
         // Creation of the first team
-        setCurrentTeam()
+        setTeam()
         
         // Creation of the second team
         currentTeam = game.team2
-        setCurrentTeam()
+        setTeam()
     }
 
     func round() {
@@ -114,7 +114,19 @@ struct CLI {
                     playerAction()
                     return
                 }
-                let character1 = currentTeam.characters[index]
+                // TODO: retourner un PERSONNAGE VIVANT !
+//                let character1 = currentTeam.characters[index]
+//                let selectedCharacter = currentTeam.livingCharacters[index]
+//                // TODO: Lancer une erreur
+//                guard let characterIndex = currentTeam.getIndexCharacterByName(selectedCharacter.name) else {
+//                    print("😱Un erreur est survenue lors du choix de votre personnage...")
+//                    return
+//                }
+                guard let character1 = currentTeam.getLivingCharacter(by: index) else {
+                    // TODO : redémarrer le jeu
+                    return
+                }
+                
                 print(
                     """
                     Vous avez choisi \(character1.name) :
@@ -122,7 +134,7 @@ struct CLI {
                     
                     """
                 )
-                if let chestContent = Item.chestAppearance() {
+                if let chestContent = Item.chestAppearance(excludeItem: character1.item) {
                     var hasAnItem = false
                     if let _ = character1.item {
                         hasAnItem = true
@@ -132,7 +144,7 @@ struct CLI {
                         😮 Oh ! Un coffre est apparu, il contient cet objet :
                         \(chestContent.name), 💪 \(chestContent.attackBonus), 🩺 \(chestContent.healingBonus)
 
-                        Voulez-vous que \(character1) prenne cet objet\(hasAnItem ? " en remplacement de celui qu’il possède déjà" : "") ?
+                        Voulez-vous que \(character1.name) prenne cet objet\(hasAnItem ? " en remplacement de celui qu’il possède déjà" : "") ?
                         1. Oui
                         2. Non
                         """
@@ -177,15 +189,19 @@ struct CLI {
                                 )
                                 if let choice = readLine() {
                                     guard let index = getCharacterIndex(choice) else {
-                                        print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
+                                        print(invalidTypingMessage(maxKey: otherTeam.livingCharacters.count))
                                         attack()
                                         return
                                     }
-                                    let character2 = otherTeam.characters[index]
+//                                    let character2 = otherTeam.characters[index]
+                                    guard let character2 = otherTeam.getLivingCharacter(by: index) else {
+                                        // TODO : redémarrer le jeu
+                                        return
+                                    }
                                     character2.life -= character1.attackPoints
                                     print(
                                         """
-                                        Vous avez infligé \(character1.attackPoints) points à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort").
+                                        Vous avez infligé \(character1.attackPoints) points à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort 😵").
                                         
                                         """
                                     )
@@ -206,8 +222,12 @@ struct CLI {
                                         heal()
                                         return
                                     }
-                                    let character2 = currentTeam.characters[index]
-                                    character2.life -= character1.healingPoints
+//                                    let character2 = currentTeam.characters[index]
+                                    guard let character2 = currentTeam.getLivingCharacter(by: index) else {
+                                        // TODO : redémarrer le jeu
+                                        return
+                                    }
+                                    character2.life += character1.healingPoints
                                     print(
                                         """
                                         Vous avez soigné \(character2.name) qui a gagné \(character1.healingPoints) points, ses points de vie sont maintenant de \(character2.life).
@@ -247,7 +267,7 @@ struct CLI {
         game.round += 1
         
         if game.team1.livingCharacters.isEmpty || game.team2.livingCharacters.isEmpty {
-            print("GAME OVER")
+            presentStats()
             return
         }
         
@@ -284,5 +304,32 @@ struct CLI {
             string += "\(forChoice ? "\(index + 1). " : "")\(displayCharacterInformations(character, isEnemy: isEnemy)) \n"
         }
         return string
+    }
+    
+    private func presentStats() {
+        print(
+            """
+            Bravo \(game.team1.livingCharacters.isEmpty ? game.team1.owner : game.team2.owner), vous avez remporté la partie !
+            La partie s’est déroulée en \(game.round).
+
+            La première équipe est dans cet état à la fin de la partie :
+            \(displayCharacters(of: game.team1))
+
+            Et voici l’état de la deuxième équipe :
+            \(displayCharacters(of: game.team2))
+
+            Tapez RECOMMENCER pour refaire une partie :
+            """
+        )
+        if let choice = readLine() {
+            guard choice == "RECOMMENCER" else {
+                print("Je n’ai pas compris ce que vous avez tapé. Écrivez très exactement “RECOMMENCER” en respectant les majuscules pour refaire une partie")
+                presentStats()
+                return
+            }
+            game.reset()
+            cli.setTeams()
+            cli.round()
+        }
     }
 }

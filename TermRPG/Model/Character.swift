@@ -11,7 +11,7 @@ class Character {
     let name: String
     
     // At begining life points are at 300
-    var life = 300 {
+    var life = 150 {
         // Life points cannot drop below 0
         didSet {
             life = life < 0 ? 0 : life

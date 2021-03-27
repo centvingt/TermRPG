@@ -28,7 +28,6 @@ class Team {
         }
     }
     
-    
     // Team is complete when it has 3 members
     private var isComplete: Bool {
         return characters.count > 2
@@ -45,7 +44,18 @@ class Team {
     
     /* Retrieve character's index with his name,
      for exemple to find a character  */
-    func getIndexCharacterByName(_ name: String) -> Int? {
+    private func getIndexCharacterByName(_ name: String) -> Int? {
         characters.firstIndex { $0.name == name }
+    }
+    func getLivingCharacter(by livingIndex: Int) -> Character? {
+        let selectedCharacter = livingCharacters[livingIndex]
+        
+        // TODO: Lancer une erreur
+        guard let characterIndex = getIndexCharacterByName(selectedCharacter.name) else {
+            print("😱Un erreur est survenue lors du choix de votre personnage...")
+            return nil
+        }
+        
+        return characters[characterIndex]
     }
 }

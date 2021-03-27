@@ -16,25 +16,25 @@ struct Item {
     // Availables items in the game
     private static let items = [
         Item(
-            name: "🌂 Umbrella",
+            name: "🌂 Parapluie",
             attackBonus: 5,
             healingBonus: 0,
             weightProbality: 10
         ),
         Item(
-            name: "🔧 Wrench",
+            name: "🔧 Clé anglaise",
             attackBonus: 10,
             healingBonus: 0,
             weightProbality: 8
         ),
         Item(
-            name: "🔪 Knife",
+            name: "🔪 Couteau",
             attackBonus: 20,
             healingBonus: 0,
             weightProbality: 6
         ),
         Item(
-            name: "🪓 Axe",
+            name: "🪓 Hâche",
             attackBonus: 40,
             healingBonus: 0,
             weightProbality: 4
@@ -46,13 +46,13 @@ struct Item {
             weightProbality: 2
         ),
         Item(
-            name: "🩹 Pads",
+            name: "🩹 Pansements",
             attackBonus: 0,
             healingBonus: 5,
             weightProbality: 10
         ),
         Item(
-            name: "💊 Pills",
+            name: "💊 Pillules miracle",
             attackBonus: 0,
             healingBonus: 10,
             weightProbality: 8
@@ -77,15 +77,20 @@ struct Item {
         )
     ]
     
-    static func chestAppearance() -> Item? {
+    static func chestAppearance(excludeItem: Item?) -> Item? {
         let appearanceProbability = Int.random(in: 0...10)
-        guard appearanceProbability > 4 else {
+        guard appearanceProbability > 3 else {
             return nil
         }
         var weightedItems = [Item]()
         Item.items.forEach { (item) in
             for _ in 0...item.weightProbality {
                 weightedItems.append(item)
+            }
+        }
+        if let excludeItem = excludeItem {
+            weightedItems = weightedItems.filter { (item) -> Bool in
+                item.name != excludeItem.name
             }
         }
         return weightedItems.randomElement()
