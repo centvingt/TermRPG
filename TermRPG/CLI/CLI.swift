@@ -87,14 +87,105 @@ class CLI {
         )
     }
     
-    private func playerAction() {
-        print(
-            """
-            \(currentTeam.owner), choisissez un personnage de votre équipe :
-            \(displayCharacters(of: currentTeam, forChoice: true))
-            """
-        )
-        var choiceIsDone = false
+    fileprivate func heal(_ character2IsSelected: inout Bool, _ character1: Character) {
+        repeat {
+            print(
+                """
+                Choisissez le personnage de votre équipe que vous souhaitez soigner :
+                \(displayCharacters(of: currentTeam, forChoice: true))
+                """
+            )
+            if let choice = readLine() {
+                guard let index = getCharacterIndex(choice) else {
+                    print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
+                    continue
+                }
+                
+                guard let character2 = currentTeam.getLivingCharacter(by: index) else {
+                    throwABigChoosingCharacterError(nthCharacter: "deuxième")
+                    return
+                }
+                
+                character2IsSelected = true
+                character2.life += character1.healingPoints
+                print(
+                    """
+                    Vous avez soigné \(character2.name) qui a gagné \(character1.healingPoints) points, ses points de vie sont maintenant de \(character2.life).
+                    
+                    """
+                )
+            }
+        } while !character2IsSelected
+    }
+    
+    fileprivate func chestChoice(_ chestChoiceIsDone: inout Bool, _ character1: Character, _ chestContent: Item) {
+        repeat {
+            if let choice = readLine() {
+                guard choice == "1" || choice == "2" else {
+                    print(invalidTypingMessage(maxKey: 2))
+                    continue
+                }
+                chestChoiceIsDone = true
+                guard choice == "1" else {
+                    continue
+                }
+                character1.item = chestContent
+            }
+        } while !chestChoiceIsDone
+    }
+    
+    fileprivate func attack(_ character2IsSelected: inout Bool, _ character1: Character) {
+        repeat {
+            print(
+                """
+                Choisissez le personnage de l’équipe adverse que vous souhaitez attaquer :
+                \(displayCharacters(of: otherTeam, forChoice: true, isEnemy: true))
+                """
+            )
+            if let choice = readLine() {
+                guard let index = getCharacterIndex(choice) else {
+                    print(invalidTypingMessage(maxKey: otherTeam.livingCharacters.count))
+                    continue
+                }
+                
+                guard let character2 = otherTeam.getLivingCharacter(by: index) else {
+                    throwABigChoosingCharacterError(nthCharacter: "deuxième")
+                    return
+                }
+                
+                character2IsSelected = true
+                
+                character2.life -= character1.attackPoints
+                print(
+                    """
+                    Vous avez infligé \(character1.attackPoints) points à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort 😵").
+                    
+                    """
+                )
+            }
+        } while !character2IsSelected
+    }
+    
+    fileprivate func selectAction(_ actionIsSelected: inout Bool, _ character1: Character) {
+        repeat {
+            if let actionChoice = readLine() {
+                guard actionChoice == "1" || actionChoice == "2" else {
+                    print(invalidTypingMessage(maxKey: 2))
+                    continue
+                }
+                actionIsSelected = true
+                if actionChoice == "1" {
+                    var character2IsSelected = false
+                    attack(&character2IsSelected, character1)
+                } else {
+                    var character2IsSelected = false
+                    heal(&character2IsSelected, character1)
+                }
+            }
+        } while !actionIsSelected
+    }
+    
+    fileprivate func chooseCharacterAction(_ choiceIsDone: inout Bool) {
         repeat {
             if let choice = readLine() {
                 guard let index = getCharacterIndex(choice) else {
@@ -131,19 +222,7 @@ class CLI {
                         """
                     )
                     var chestChoiceIsDone = false
-                    repeat {
-                        if let choice = readLine() {
-                            guard choice == "1" || choice == "2" else {
-                                print(invalidTypingMessage(maxKey: 2))
-                                continue
-                            }
-                            chestChoiceIsDone = true
-                            guard choice == "1" else {
-                                continue
-                            }
-                            character1.item = chestContent
-                        }
-                    } while !chestChoiceIsDone
+                    chestChoice(&chestChoiceIsDone, character1, chestContent)
                 }
                 print(
                     """
@@ -153,79 +232,20 @@ class CLI {
                     """
                 )
                 var actionIsSelected = false
-                repeat {
-                    if let actionChoice = readLine() {
-                        guard actionChoice == "1" || actionChoice == "2" else {
-                            print(invalidTypingMessage(maxKey: 2))
-                            continue
-                        }
-                        actionIsSelected = true
-                        if actionChoice == "1" {
-                            var character2IsSelected = false
-                            repeat {
-                                print(
-                                    """
-                                    Choisissez le personnage de l’équipe adverse que vous souhaitez attaquer :
-                                    \(displayCharacters(of: otherTeam, forChoice: true, isEnemy: true))
-                                    """
-                                )
-                                if let choice = readLine() {
-                                    guard let index = getCharacterIndex(choice) else {
-                                        print(invalidTypingMessage(maxKey: otherTeam.livingCharacters.count))
-                                        continue
-                                    }
-                                    
-                                    guard let character2 = otherTeam.getLivingCharacter(by: index) else {
-                                        throwABigChoosingCharacterError(nthCharacter: "deuxième")
-                                        return
-                                    }
-                                    
-                                    character2IsSelected = true
-                                    
-                                    character2.life -= character1.attackPoints
-                                    print(
-                                        """
-                                        Vous avez infligé \(character1.attackPoints) points à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort 😵").
-                                        
-                                        """
-                                    )
-                                }
-                            } while !character2IsSelected
-                        } else {
-                            var character2IsSelected = false
-                            repeat {
-                                print(
-                                    """
-                                    Choisissez le personnage de votre équipe que vous souhaitez soigner :
-                                    \(displayCharacters(of: currentTeam, forChoice: true))
-                                    """
-                                )
-                                if let choice = readLine() {
-                                    guard let index = getCharacterIndex(choice) else {
-                                        print(invalidTypingMessage(maxKey: currentTeam.livingCharacters.count))
-                                        continue
-                                    }
-                                    
-                                    guard let character2 = currentTeam.getLivingCharacter(by: index) else {
-                                        throwABigChoosingCharacterError(nthCharacter: "deuxième")
-                                        return
-                                    }
-                                    
-                                    character2IsSelected = true
-                                    character2.life += character1.healingPoints
-                                    print(
-                                        """
-                                        Vous avez soigné \(character2.name) qui a gagné \(character1.healingPoints) points, ses points de vie sont maintenant de \(character2.life).
-                                        
-                                        """
-                                    )
-                                }
-                            } while !character2IsSelected
-                        }
-                    }
-                } while !actionIsSelected
+                selectAction(&actionIsSelected, character1)
             }
         } while !choiceIsDone
+    }
+    
+    private func playerAction() {
+        print(
+            """
+            \(currentTeam.owner), choisissez un personnage de votre équipe :
+            \(displayCharacters(of: currentTeam, forChoice: true))
+            """
+        )
+        var choiceIsDone = false
+        chooseCharacterAction(&choiceIsDone)
     }
     
     // Set a new character
@@ -253,7 +273,6 @@ class CLI {
             }
         } while !characterIsCreated
     }
-    
     
     private func invalidTypingMessage(maxKey: Int) -> String {
         var string = "1"
