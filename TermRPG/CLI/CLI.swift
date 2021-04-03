@@ -58,6 +58,7 @@ class CLI {
         print(
             """
             Bravo \(game.team1.livingCharacters.isEmpty ? game.team1.owner : game.team2.owner), vous avez remporté la partie !
+            
             La partie s’est déroulée en \(game.round) tours.
             
             La première équipe est dans cet état à la fin de la partie :
@@ -265,7 +266,7 @@ class CLI {
                     
                     guard let characterChoice = getUserChoice(),
                           characterChoice < team.characters.count else {
-                        print(getInvalidTypingMessage(maxKey: 2))
+                        print(getInvalidTypingMessage(maxKey: team.characters.count))
                         continue
                     }
                     
@@ -283,11 +284,13 @@ class CLI {
                             """
                         )
                     case .heal:
+                        let life = character2.life
                         character2.life += character1.healingPoints
+                        let benefit = character2.life - life
                         print(
                             """
                             
-                            Vous avez soigné \(character2.name) qui a gagné \(character1.healingPoints) points, ses points de vie sont maintenant de \(character2.life).
+                            Vous avez soigné \(character2.name) qui a gagné \(benefit) points, ses points de vie sont maintenant de \(character2.life).
                             
                             """
                         )
@@ -375,7 +378,8 @@ class CLI {
     
     private func getUserChoice() -> Int? {
         guard let typed = readLine(),
-            let choice = Int(typed) else { return nil }
+            let choice = Int(typed),
+            choice > 0 else { return nil }
         return choice
     }
     

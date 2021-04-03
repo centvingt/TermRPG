@@ -13,12 +13,14 @@ class Character {
     var item: Item
     let baseAttack: Int
     let baseHealing: Int
+    let maxLife: Int
     
     // At begining life points are at 300
     var life: Int {
         // Life points cannot drop below 0
         didSet {
-            life = life < 0 ? 0 : life
+            if life < 0 { life = 0 }
+            if life > maxLife { life = maxLife}
         }
     }
     
@@ -31,14 +33,15 @@ class Character {
         name: String,
         emoji: String,
         item: Item,
-        life: Int,
+        maxLife: Int,
         baseAttack: Int,
         baseHealing: Int
     ) {
         self.name = name
         self.emoji = emoji
         self.item = item
-        self.life = life
+        self.maxLife = maxLife
+        self.life = maxLife
         self.baseAttack = baseAttack
         self.baseHealing = baseHealing
     }

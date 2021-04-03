@@ -13,7 +13,7 @@ class Doctor: Character {
             name: name,
             emoji: "👩‍⚕️",
             item: Pills(),
-            life: 100,
+            maxLife: 100,
             baseAttack: 5,
             baseHealing: 40
         )

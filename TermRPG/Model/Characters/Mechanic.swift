@@ -13,7 +13,7 @@ class Mechanic: Character {
             name: name,
             emoji: "👨‍🔧",
             item: Wrench(),
-            life: 150,
+            maxLife: 150,
             baseAttack: 40,
             baseHealing: 5
         )

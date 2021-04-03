@@ -13,7 +13,7 @@ class FireFighter: Character {
             name: name,
             emoji: "👨‍🚒",
             item: Axe(),
-            life: 120,
+            maxLife: 120,
             baseAttack: 10,
             baseHealing: 20
         )
