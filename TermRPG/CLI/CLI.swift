@@ -265,7 +265,7 @@ class CLI {
                     )
                     
                     guard let characterChoice = getUserChoice(),
-                          characterChoice < team.characters.count else {
+                          characterChoice < team.livingCharacters.count else {
                         print(getInvalidTypingMessage(maxKey: team.characters.count))
                         continue
                     }
@@ -302,7 +302,6 @@ class CLI {
     
     private func getChest(_ character1: Character) {
         if let chestContent = Item.chestAppearance(excludeItem: character1.item) {
-            
             print(
                 """
                     😮 Oh ! Un coffre est apparu, il contient cet objet :
