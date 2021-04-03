@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0C5C1B26165C0B003B12DE /* Umbrella.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C1A26165C0B003B12DE /* Umbrella.swift */; };
+		2F0C5C2026166492003B12DE /* Wrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C1F26166492003B12DE /* Wrench.swift */; };
+		2F0C5C24261664C3003B12DE /* AttackItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C23261664C3003B12DE /* AttackItem.swift */; };
+		2F0C5C2A26166658003B12DE /* HealingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C2926166658003B12DE /* HealingItem.swift */; };
+		2F0C5C302616675A003B12DE /* Knife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C2F2616675A003B12DE /* Knife.swift */; };
+		2F0C5C34261667BB003B12DE /* Axe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C33261667BB003B12DE /* Axe.swift */; };
+		2F0C5C38261667DC003B12DE /* Dynamite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C37261667DC003B12DE /* Dynamite.swift */; };
+		2F0C5C4226166AB7003B12DE /* FireFighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C4126166AB7003B12DE /* FireFighter.swift */; };
+		2F0C5C4B26166E70003B12DE /* HydroalcoholicGel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C4026166965003B12DE /* HydroalcoholicGel.swift */; };
+		2F0C5C4C26166E70003B12DE /* Pads.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C3C2616683F003B12DE /* Pads.swift */; };
+		2F0C5C4D26166E70003B12DE /* Pills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C3D261668AF003B12DE /* Pills.swift */; };
+		2F0C5C4E26166E70003B12DE /* GeneticalTherapy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C3F26166926003B12DE /* GeneticalTherapy.swift */; };
+		2F0C5C4F26166E70003B12DE /* Injections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C3E261668EE003B12DE /* Injections.swift */; };
+		2F0C5C5226166EB5003B12DE /* Doctor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C5126166EB5003B12DE /* Doctor.swift */; };
+		2F0C5C5726167140003B12DE /* Mechanic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0C5C5626167140003B12DE /* Mechanic.swift */; };
 		2F9B9784260695FF0088DA7A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B9783260695FF0088DA7A /* main.swift */; };
 		2F9B978C26069D7C0088DA7A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B978B26069D7C0088DA7A /* Item.swift */; };
 		2F9B978F26069DDA0088DA7A /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B978E26069DDA0088DA7A /* Character.swift */; };
@@ -28,6 +43,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F0C5C1A26165C0B003B12DE /* Umbrella.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Umbrella.swift; sourceTree = "<group>"; };
+		2F0C5C1F26166492003B12DE /* Wrench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wrench.swift; sourceTree = "<group>"; };
+		2F0C5C23261664C3003B12DE /* AttackItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttackItem.swift; sourceTree = "<group>"; };
+		2F0C5C2926166658003B12DE /* HealingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealingItem.swift; sourceTree = "<group>"; };
+		2F0C5C2F2616675A003B12DE /* Knife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knife.swift; sourceTree = "<group>"; };
+		2F0C5C33261667BB003B12DE /* Axe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Axe.swift; sourceTree = "<group>"; };
+		2F0C5C37261667DC003B12DE /* Dynamite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamite.swift; sourceTree = "<group>"; };
+		2F0C5C3C2616683F003B12DE /* Pads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pads.swift; sourceTree = "<group>"; };
+		2F0C5C3D261668AF003B12DE /* Pills.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pills.swift; sourceTree = "<group>"; };
+		2F0C5C3E261668EE003B12DE /* Injections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injections.swift; sourceTree = "<group>"; };
+		2F0C5C3F26166926003B12DE /* GeneticalTherapy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneticalTherapy.swift; sourceTree = "<group>"; };
+		2F0C5C4026166965003B12DE /* HydroalcoholicGel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydroalcoholicGel.swift; sourceTree = "<group>"; };
+		2F0C5C4126166AB7003B12DE /* FireFighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireFighter.swift; sourceTree = "<group>"; };
+		2F0C5C5126166EB5003B12DE /* Doctor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Doctor.swift; sourceTree = "<group>"; };
+		2F0C5C5626167140003B12DE /* Mechanic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mechanic.swift; sourceTree = "<group>"; };
 		2F9B9780260695FF0088DA7A /* TermRPG */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TermRPG; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F9B9783260695FF0088DA7A /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		2F9B978B26069D7C0088DA7A /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -48,6 +78,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F0C5C1926165BB6003B12DE /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				2F0C5C23261664C3003B12DE /* AttackItem.swift */,
+				2F0C5C2926166658003B12DE /* HealingItem.swift */,
+				2F0C5C2D2616673D003B12DE /* AttackItems */,
+				2F0C5C3B2616680C003B12DE /* HealingItems */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
+		2F0C5C2D2616673D003B12DE /* AttackItems */ = {
+			isa = PBXGroup;
+			children = (
+				2F0C5C1A26165C0B003B12DE /* Umbrella.swift */,
+				2F0C5C1F26166492003B12DE /* Wrench.swift */,
+				2F0C5C2F2616675A003B12DE /* Knife.swift */,
+				2F0C5C33261667BB003B12DE /* Axe.swift */,
+				2F0C5C37261667DC003B12DE /* Dynamite.swift */,
+			);
+			path = AttackItems;
+			sourceTree = "<group>";
+		};
+		2F0C5C3B2616680C003B12DE /* HealingItems */ = {
+			isa = PBXGroup;
+			children = (
+				2F0C5C3C2616683F003B12DE /* Pads.swift */,
+				2F0C5C3D261668AF003B12DE /* Pills.swift */,
+				2F0C5C3E261668EE003B12DE /* Injections.swift */,
+				2F0C5C3F26166926003B12DE /* GeneticalTherapy.swift */,
+				2F0C5C4026166965003B12DE /* HydroalcoholicGel.swift */,
+			);
+			path = HealingItems;
+			sourceTree = "<group>";
+		};
+		2F0C5C4626166D74003B12DE /* Characters */ = {
+			isa = PBXGroup;
+			children = (
+				2F0C5C5126166EB5003B12DE /* Doctor.swift */,
+				2F0C5C4126166AB7003B12DE /* FireFighter.swift */,
+				2F0C5C5626167140003B12DE /* Mechanic.swift */,
+			);
+			path = Characters;
+			sourceTree = "<group>";
+		};
 		2F9B9777260695FF0088DA7A = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +156,8 @@
 				2F9B9794260741B60088DA7A /* Team.swift */,
 				2F9B978E26069DDA0088DA7A /* Character.swift */,
 				2F9B978B26069D7C0088DA7A /* Item.swift */,
+				2F0C5C4626166D74003B12DE /* Characters */,
+				2F0C5C1926165BB6003B12DE /* Items */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -150,12 +227,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F0C5C302616675A003B12DE /* Knife.swift in Sources */,
+				2F0C5C4226166AB7003B12DE /* FireFighter.swift in Sources */,
 				2F9B978F26069DDA0088DA7A /* Character.swift in Sources */,
+				2F0C5C4D26166E70003B12DE /* Pills.swift in Sources */,
+				2F0C5C4E26166E70003B12DE /* GeneticalTherapy.swift in Sources */,
 				2F9B978C26069D7C0088DA7A /* Item.swift in Sources */,
+				2F0C5C4F26166E70003B12DE /* Injections.swift in Sources */,
+				2F0C5C38261667DC003B12DE /* Dynamite.swift in Sources */,
 				2F9B97A1260890FA0088DA7A /* CLI.swift in Sources */,
+				2F0C5C1B26165C0B003B12DE /* Umbrella.swift in Sources */,
+				2F0C5C5226166EB5003B12DE /* Doctor.swift in Sources */,
+				2F0C5C2A26166658003B12DE /* HealingItem.swift in Sources */,
+				2F0C5C24261664C3003B12DE /* AttackItem.swift in Sources */,
+				2F0C5C34261667BB003B12DE /* Axe.swift in Sources */,
 				2F9B9784260695FF0088DA7A /* main.swift in Sources */,
+				2F0C5C2026166492003B12DE /* Wrench.swift in Sources */,
+				2F0C5C5726167140003B12DE /* Mechanic.swift in Sources */,
 				2F9B9795260741B60088DA7A /* Team.swift in Sources */,
+				2F0C5C4C26166E70003B12DE /* Pads.swift in Sources */,
 				2F9B979226069E1B0088DA7A /* Game.swift in Sources */,
+				2F0C5C4B26166E70003B12DE /* HydroalcoholicGel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
