@@ -15,11 +15,12 @@ class Character {
     let baseHealing: Int
     let maxLife: Int
     
-    // At begining life points are at 300
     var life: Int {
-        // Life points cannot drop below 0
         didSet {
+            // Life points cannot drop below 0
             if life < 0 { life = 0 }
+            
+            // Life points cannot exceed maxLife
             if life > maxLife { life = maxLife}
         }
     }
@@ -45,19 +46,20 @@ class Character {
         self.baseAttack = baseAttack
         self.baseHealing = baseHealing
     }
-    
-    var healingPoints: Int {
-        /* A character has 2 healing points, plus
-         the healing points of his eventual item */
-        baseHealing + item.healingBonus
-    }
+
+    /* Attack points are sum of the character's starting
+     attack points plus the attack's bonus of the item */
     var attackPoints: Int {
-        /* A character has 3 attack points, plus
-         the attack points of his eventual item */
         baseAttack + item.attackBonus
     }
+
+    /* Healing points are sum to the character's starting
+     healing points plus the healing's bonus of the item */
+    var healingPoints: Int {
+        baseHealing + item.healingBonus
+    }
     
-//    static let availableCharacters = [ Doctor, FireFighter, Mechanic ]
+    /* Display character's informations */
     var informations: String {
         """
         ❤️ Points de vie : \(life)
@@ -65,6 +67,16 @@ class Character {
             🩺 Points de soins : \(baseHealing)
             \(self.item.informations)
         """
+    }
+    
+    /* Attack another character */
+    func attack(_ character: Character) {
+        character.life -= attackPoints
+    }
+    
+    /* Heal another character */
+    func heal(_ character: Character) {
+        character.life += healingPoints
     }
 }
 

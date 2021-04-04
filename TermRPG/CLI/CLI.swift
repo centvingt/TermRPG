@@ -49,7 +49,7 @@ class CLI {
     }
     
     private func restart() {
-        game.reset()
+        game = Game()
         cli.setTeams()
         cli.round()
     }
@@ -62,9 +62,11 @@ class CLI {
             La partie s’est déroulée en \(game.round) tours.
             
             La première équipe est dans cet état à la fin de la partie :
+            
             \(displayCharacters(of: game.team1))
             
             Et voici l’état de la deuxième équipe :
+            
             \(displayCharacters(of: game.team2))
             
             Tapez RECOMMENCER pour refaire une partie :
@@ -165,7 +167,7 @@ class CLI {
                     character = Mechanic(name: characterName)
                 }
                 
-                currentTeam.add(character: character)
+                currentTeam.characters.append(character)
                 characterIsCreated = true
                 
                 print(
@@ -244,6 +246,7 @@ class CLI {
                         team = otherTeam
                         print(
                             """
+                            
                             \(currentTeam.owner), choisissez quel joueur de l’équipe adverse vous souhaitez attaquer :
                             
                             """
@@ -252,6 +255,7 @@ class CLI {
                         team = currentTeam
                         print(
                             """
+                            
                             \(currentTeam.owner), choisissez quel joueur de votre équipe vous souhaitez soigner :
                             
                             """
@@ -275,7 +279,7 @@ class CLI {
                     
                     switch action {
                     case .attack:
-                        character2.life -= character1.attackPoints
+                        character1.attack(character2)
                         print(
                             """
                             
@@ -285,7 +289,7 @@ class CLI {
                         )
                     case .heal:
                         let life = character2.life
-                        character2.life += character1.healingPoints
+                        character1.heal(character2)
                         let benefit = character2.life - life
                         print(
                             """

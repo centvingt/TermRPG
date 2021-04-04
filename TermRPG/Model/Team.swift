@@ -36,26 +36,4 @@ class Team {
     init(owner: String) {
         self.owner = owner
     }
-    
-    // Add a character
-    func add(character: Character) {
-        characters.append(character)
-    }
-    
-    /* Retrieve character's index with his name,
-     for exemple to find a character  */
-    private func getIndexCharacterByName(_ name: String) -> Int? {
-        characters.firstIndex { $0.name == name }
-    }
-    func getLivingCharacter(by livingIndex: Int) -> Character? {
-        let selectedCharacter = livingCharacters[livingIndex]
-        
-        // TODO: Lancer une erreur
-        guard let characterIndex = getIndexCharacterByName(selectedCharacter.name) else {
-            print("😱Un erreur est survenue lors du choix de votre personnage...")
-            return nil
-        }
-        
-        return characters[characterIndex]
-    }
 }
