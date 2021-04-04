@@ -265,7 +265,7 @@ class CLI {
                     )
                     
                     guard let characterChoice = getUserChoice(),
-                          characterChoice < team.livingCharacters.count else {
+                          characterChoice <= team.livingCharacters.count else {
                         print(getInvalidTypingMessage(maxKey: team.characters.count))
                         continue
                     }
