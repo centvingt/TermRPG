@@ -49,13 +49,13 @@ class Character {
 
     /* Attack points are sum of the character's starting
      attack points plus the attack's bonus of the item */
-    var attackPoints: Int {
+    private var attackPoints: Int {
         baseAttack + item.attackBonus
     }
 
     /* Healing points are sum to the character's starting
      healing points plus the healing's bonus of the item */
-    var healingPoints: Int {
+    private var healingPoints: Int {
         baseHealing + item.healingBonus
     }
     

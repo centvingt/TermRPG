@@ -279,11 +279,13 @@ class CLI {
                     
                     switch action {
                     case .attack:
+                        let life = character2.life
                         character1.attack(character2)
+                        let loss = life - character2.life
                         print(
                             """
                             
-                            Vous avez infligé \(character1.attackPoints) points à \(character2.name), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort 😵").
+                            Vous avez attaqué \(character2.name) qui a perdu \(loss), ses points de vie sont descendus à \(character2.life)\(character2.isAlive ? "" : " et il est mort 😵").
                             
                             """
                         )
