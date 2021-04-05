@@ -40,13 +40,17 @@ class CLI {
             currentTeam = game.team1
             playerAction()
             
+            if game.team2.livingCharacters.isEmpty {
+                gameIsOver = true
+                gameOver()
+            }
+            
             currentTeam = game.team2
             playerAction()
             
             game.round += 1
             
-            /* Game is over when a team has no more living character */
-            if game.team1.livingCharacters.isEmpty || game.team2.livingCharacters.isEmpty {
+            if game.team1.livingCharacters.isEmpty {
                 gameIsOver = true
                 gameOver()
             }
