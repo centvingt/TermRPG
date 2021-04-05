@@ -7,20 +7,13 @@
 
 import Foundation
 
-class CLI {
-    var game: Game
-    
+class CLI {    
     /* Team of the active player */
-    private var currentTeam: Team
+    private var currentTeam = game.team1
     
     /* Opponent's team */
     private var otherTeam: Team {
         currentTeam.owner == game.team1.owner ? game.team2 : game.team1
-    }
-    
-    init(game: Game) {
-        self.game = game
-        self.currentTeam = game.team1
     }
     
     /* Set teams at the start of the game */
@@ -60,6 +53,7 @@ class CLI {
     /* Make a new game */
     private func restart() {
         game = Game()
+        currentTeam = game.team1
         cli.setTeams()
         cli.round()
     }

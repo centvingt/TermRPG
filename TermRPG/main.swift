@@ -8,7 +8,7 @@
 import Foundation
 
 var game = Game()
-var cli = CLI(game: game)
+var cli = CLI()
 
 func presentMenu() {
     cli.setTeams()
