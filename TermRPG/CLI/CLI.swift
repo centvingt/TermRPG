@@ -372,7 +372,7 @@ class CLI {
                 print(
                     """
                         
-                    Votre personnage a pris cet objet et à la place de celui qu’il possédait.
+                    Votre personnage a pris cet objet à la place de celui qu’il possédait.
                     
                     """
                 )
